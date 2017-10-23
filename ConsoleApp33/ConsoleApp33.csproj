@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.50.2" />
+    <PackageReference Include="System.Data.Common" Version="4.3.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.4.0" />
+    <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Flepper.QueryBuilder">
+      <HintPath>..\..\..\..\..\..\..\Temp\Flepper\flepper\Flepper.QueryBuilder\bin\Debug\netstandard2.0\Flepper.QueryBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="Flepper.QueryBuilder.DapperExtensions">
+      <HintPath>..\..\..\..\..\..\..\Temp\Flepper\flepper\Flepper.QueryBuilder.DapperExtensions\bin\Debug\netstandard2.0\Flepper.QueryBuilder.DapperExtensions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
