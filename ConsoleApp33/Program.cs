@@ -18,7 +18,7 @@ namespace ConsoleApp33
                 .Columns("Column1")
                 .Values("Value1")
                 .WithScopeIdentity()
-                .BuildWithParameters();
+                .BuildWithParameters(); 
 
 
 
