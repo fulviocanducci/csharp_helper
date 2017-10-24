@@ -98,18 +98,26 @@ namespace ConsoleApp33
             //SqlResult sqlResult = sqlServerCompiler.Compile(query);
             //sqlResult.Bindings
 
-            SqlParameter created = new SqlParameter("@Created", SqlDbType.DateTime);
-            created.IsNullable = true;
-            created.Value = DateTime.Parse("03/01/1977");
+            SqlParameter created = new SqlParameter("@Created", SqlDbType.DateTime)
+            {
+                IsNullable = true,
+                Value = DateTime.Parse("01/06/1955")
+            };
 
-            SqlParameter Name = new SqlParameter("@Name", SqlDbType.VarChar, 50);
-            Name.Value = "Fúlvio";
+            SqlParameter Name = new SqlParameter("@Name", SqlDbType.VarChar, 50)
+            {
+                Value = "Maria Aparecida Dias Cintra"
+            };
 
-            SqlParameter Id = new SqlParameter("@Id", SqlDbType.Int);
-            Id.Value = 1;
+            SqlParameter Id = new SqlParameter("@Id", SqlDbType.Int)
+            {
+                Value = 8
+            };
 
-            SqlParameter Active = new SqlParameter("@Active", SqlDbType.Bit);
-            Active.Value = true;
+            SqlParameter Active = new SqlParameter("@Active", SqlDbType.Bit)
+            {
+                Value = true
+            };
 
             IResultBuilder resultInsert = Builders.InsertFrom("Owe")
                 .Columns("Created", "Name", "Active")
@@ -124,6 +132,19 @@ namespace ConsoleApp33
                 .Builder();
 
             var id = dbConnection.Update(resultUpdate);
+
+
+            //Builders.InsertFrom("")
+            //    .Columns("")
+            //    .Values("")
+            //    .Identity()
+            //    .Builder();
+
+
+            //Builders.UpdateFrom("")
+            //    .SetValue("", null)
+            //    .Where("Id", "")
+            //    .Builder();
 
            // dbConnection.Execute(result.Sql, result.Parameter);
 

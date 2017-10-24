@@ -19,7 +19,6 @@ namespace Canducci.Simply.SqlBuilder
         {
             return (new Builders().Update(table));
         }
-
         
     }
 }

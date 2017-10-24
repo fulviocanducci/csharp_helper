@@ -1,5 +1,6 @@
 ﻿using Canducci.Simply.SqlBuilder.Interfaces;
 using System.Data;
+using System.Data.Common;
 
 namespace Canducci.Simply.SqlBuilder
 {
@@ -13,27 +14,31 @@ namespace Canducci.Simply.SqlBuilder
             using (IDbCommand command = connection.CreateCommand())
             {
                 command.CommandText = result.Sql;
-                foreach (var parameter in result.Parameter)
-                    command.Parameters.Add(parameter);
+                command.Parameters.AddRange(result.Parameter);
                 o = (T)command.ExecuteScalar();
             }
-            connection.Close();
+            if (connection.State == ConnectionState.Open) connection.Close();
             return o;
         }
 
         public static bool Update(this IDbConnection connection, IResultBuilder result)        
         {
-            int q = 0;
+            int o = 0;
             if (connection.State == ConnectionState.Closed) connection.Open();
             using (IDbCommand command = connection.CreateCommand())
             {
                 command.CommandText = result.Sql;
-                foreach (var parameter in result.Parameter)
-                    command.Parameters.Add(parameter);
-                q = command.ExecuteNonQuery();
+                command.Parameters.AddRange(result.Parameter);
+                o = command.ExecuteNonQuery();
             }
-            connection.Close();
-            return q > 0;
+            if (connection.State == ConnectionState.Open) connection.Close();
+            return (o > 0);
+        }
+
+        public static void AddRange(this IDataParameterCollection parameterCollection, DbParameter[] parameters)
+        {
+            foreach (DbParameter parameter in parameters)
+                parameterCollection.Add(parameter);            
         }
     }
 }
