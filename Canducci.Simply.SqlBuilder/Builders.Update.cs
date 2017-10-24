@@ -46,5 +46,10 @@ namespace Canducci.Simply.SqlBuilder
         {
             return (IWhere)SetValue(field, value);
         }
+
+        IWhereDelete IWhereDelete.Where<T>(string field, T value)
+        {
+            return (IWhereDelete)Where(field, value);
+        }
     }
 }

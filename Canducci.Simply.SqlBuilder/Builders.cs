@@ -19,6 +19,11 @@ namespace Canducci.Simply.SqlBuilder
         {
             return (new Builders().Update(table));
         }
-        
+
+        public static IWhereDelete DeleteFrom(string table)
+        {
+            return (new Builders().Delete(table));
+        }
+
     }
 }

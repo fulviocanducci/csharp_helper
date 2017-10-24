@@ -131,7 +131,12 @@ namespace ConsoleApp33
                 .Where("Id", Id)
                 .Builder();
 
-            var id = dbConnection.Update(resultUpdate);
+            //var id = dbConnection.Update(resultUpdate);
+
+            var result = Builders.DeleteFrom("Owe")
+                .Where("Id", Id)
+                .Where("Create", created)                
+                .Builder();
 
 
             //Builders.InsertFrom("")
