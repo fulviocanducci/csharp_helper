@@ -1,6 +1,7 @@
-﻿using System;
-
-namespace ConsoleApp33.Builder
+﻿using Canducci.Simply.SqlBuilder.Interfaces;
+using System;
+using System.Data.Common;
+namespace Canducci.Simply.SqlBuilder
 {
     public partial class Builders : IInsert, IColumns, IValues, IBuilder, IIdentity
     {
@@ -10,28 +11,27 @@ namespace ConsoleApp33.Builder
             return this;
         }
 
-        public IIdentity Values(params object[] values)
+        public IIdentity Values(params DbParameter[] values)
         {
+            Parameters.AddRange(values);
             StrQuery.Append("VALUES(");
             for (int i = 0; i < values.Length; i++)
             {
                 if (i > 0) StrQuery.AppendFormat(",");
-                StrQuery.Append($"@p{i}");
-                Parameters.Add($"@p{i}", values[i]);
+                StrQuery.Append(values[i].ParameterName);                
             }
             StrQuery.Append(");");
-            return this;
+            return this; 
         }
 
         public IResultBuilder Builder()
-        {
-            var dynamicParameter = CreateParameters.Instance.TypeWithValues(Parameters);
-            return new ResultBuilder(StrQuery.ToString(), dynamicParameter);
+        {            
+            return new ResultBuilder(StrQuery.ToString(), Parameters.ToArray());
         }
 
         public IBuilder Identity()
         {
-            StrQuery.Append("SELECT SCOPE_IDENTITY();");
+            StrQuery.Append("SELECT CAST(SCOPE_IDENTITY() AS int);");
             return this;
         }
 

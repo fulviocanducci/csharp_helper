@@ -1,5 +1,4 @@
-﻿
-namespace ConsoleApp33.Builder
+﻿namespace Canducci.Simply.SqlBuilder.Interfaces
 {
     public interface IBuilder
     {

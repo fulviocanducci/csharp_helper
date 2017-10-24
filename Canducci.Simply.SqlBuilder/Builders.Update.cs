@@ -1,34 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ConsoleApp33.Builder
+﻿using Canducci.Simply.SqlBuilder.Interfaces;
+using System.Data.Common;
+namespace Canducci.Simply.SqlBuilder
 {
-    public partial class Builders : ISetValue, IWhere, IUpdate
+    public partial class Builders: ISetValue, IWhere, IUpdate
     {
-        private StringBuilder StrQuery { get; set; } = new StringBuilder();
-        private IDictionary<string, object> Parameters { get; set; } = new Dictionary<string, object>();          
-
-        public static IColumns InsertFrom(string table)
-        {
-            return (new Builders().Insert(table));
-        }
-
-        public static ISetValue UpdateFrom(string table)
-        {
-            return (new Builders().Update(table));
-        }
-
         public ISetValue SetValue<T>(string field, T value)
+            where T : DbParameter
         {
-            string p = $"@p{Parameters.Count}";
-            Parameters.Add(p, value);
             if (!StrQuery.ToString().Contains("SET"))
                 StrQuery.AppendFormat(" SET ");
             else
                 StrQuery.AppendFormat(", ");
-            StrQuery.AppendFormat("[{0}]={1}", field, p);
-            return this;                
+            StrQuery.AppendFormat("[{0}]={1}", field, value.ParameterName);
+            Parameters.Add(value);
+            return this;
         }
 
         public ISetValue Update(string table, string schema = "")
@@ -41,14 +26,14 @@ namespace ConsoleApp33.Builder
         }
 
         public IWhere Where<T>(string field, T value)
+            where T : DbParameter
         {
-            string p = $"@p{Parameters.Count}";
-            Parameters.Add(p, value);
             if (!StrQuery.ToString().Contains("WHERE"))
                 StrQuery.AppendFormat(" WHERE ");
             else
                 StrQuery.AppendFormat(" AND ");
-            StrQuery.AppendFormat("[{0}]={1}", field, p);
+            StrQuery.AppendFormat("[{0}]={1}", field, value.ParameterName);
+            Parameters.Add(value);
             return this;
         }
 
