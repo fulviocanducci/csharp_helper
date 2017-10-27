@@ -8,22 +8,32 @@ namespace Canducci.Simply.SqlBuilder
     public partial class Builders
     {
         private StringBuilder StrQuery { get; set; } = new StringBuilder();
-        private List<DbParameter> Parameters { get; set; } = new List<DbParameter>();         
+        private List<DbParameter> Parameters { get; set; } = new List<DbParameter>();
+        public ILayout Layout { get; private set; }
 
-        public static IColumns InsertFrom(string table)
+        public Builders(ILayout layout)
         {
-            return (new Builders().Insert(table));
+            Layout = layout;
         }
 
-        public static ISetValue UpdateFrom(string table)
+        public static IColumns InsertFrom(ILayout layout, string table)
         {
-            return (new Builders().Update(table));
+            return (new Builders(layout).Insert(table));
         }
 
-        public static IWhereDelete DeleteFrom(string table)
+        public static ISetValue UpdateFrom(ILayout layout, string table)
         {
-            return (new Builders().Delete(table));
+            return (new Builders(layout).Update(table));
         }
 
+        public static IWhereDelete DeleteFrom(ILayout layout, string table)
+        {
+            return (new Builders(layout).Delete(table));
+        }
+
+        public static ISelect SelectFrom(ILayout layout, string table)
+        {
+            return (new Builders(layout).From(table));
+        }
     }
 }

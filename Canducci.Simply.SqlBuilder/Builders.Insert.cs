@@ -7,7 +7,7 @@ namespace Canducci.Simply.SqlBuilder
     {
         public IValues Columns(params string[] values)
         {
-            StrQuery.AppendFormat("([{0}]) ", String.Join("],[", values));
+            StrQuery.AppendFormat("({0}) ", Layout.Open() + string.Join($"{Layout.Close()},{Layout.Open()}", values) + Layout.Close());
             return this;
         }
 
@@ -38,9 +38,9 @@ namespace Canducci.Simply.SqlBuilder
         public IColumns Insert(string table, string schema = "")
         {
             if (string.IsNullOrWhiteSpace(schema))
-                StrQuery.Append($"INSERT INTO {table}");
+                StrQuery.Append($"INSERT INTO {Layout.Param(table)}");
             else
-                StrQuery.Append($"INSERT INTO {schema}.{table}");
+                StrQuery.Append($"INSERT INTO {Layout.Param(schema)}.{Layout.Param(table)}");
             return this;
         }
     }

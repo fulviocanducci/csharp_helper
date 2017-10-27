@@ -4,6 +4,10 @@ namespace Canducci.Simply.SqlBuilder
 {
     public partial class Builders: ISetValue, IWhere, IUpdate
     {
+        public Builders()
+        {
+        }
+
         public ISetValue SetValue<T>(string field, T value)
             where T : DbParameter
         {
@@ -19,9 +23,9 @@ namespace Canducci.Simply.SqlBuilder
         public ISetValue Update(string table, string schema = "")
         {
             if (string.IsNullOrWhiteSpace(schema))
-                StrQuery.Append($"UPDATE {table}");
+                StrQuery.Append($"UPDATE {Layout.Param(table)}");
             else
-                StrQuery.Append($"UPDATE INTO {schema}.{table}");
+                StrQuery.Append($"UPDATE INTO {Layout.Param(schema)}.{Layout.Param(table)}");
             return this;
         }
 
