@@ -1,6 +1,6 @@
 ﻿using Canducci.Simply.SqlBuilder;
 using Canducci.Simply.SqlBuilder.Interfaces;
-using Dapper;
+//using Dapper;
 //using Dapper;
 //using Dapper;
 //using Flepper.QueryBuilder;
@@ -46,7 +46,7 @@ namespace ConsoleApp33
 
             SqlParameter Id = new SqlParameter("@Id", SqlDbType.Int)
             {
-                Value = 1
+                Value = 2
             };
 
             SqlParameter Active = new SqlParameter("@Active", SqlDbType.Bit)
@@ -89,10 +89,11 @@ namespace ConsoleApp33
 
 
             var result = Builders.SelectFrom(layout, "Owe")
-                .Columns("Id,Created")
+                
+                //.Where("Id", Id)//
                 .Builder();
 
-
+            var dados = dbConnection.Query(result);
 
 
             Console.ReadKey();
