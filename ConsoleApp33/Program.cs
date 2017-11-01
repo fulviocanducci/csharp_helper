@@ -1,12 +1,7 @@
 ﻿using Canducci.Simply.SqlBuilder;
 using Canducci.Simply.SqlBuilder.Interfaces;
-//using Dapper;
-//using Dapper;
-//using Dapper;
-//using Flepper.QueryBuilder;
-//using Flepper.QueryBuilder.DapperExtensions;
-using SqlKata;
-using SqlKata.Compilers;
+using Dapper;
+using Flepper.QueryBuilder.DapperExtensions;
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -62,6 +57,8 @@ namespace ConsoleApp33
                 .Identity()
                 .Builder();
 
+            var r = dbConnection.Insert<int>(resultInsert);
+
             //IResultBuilder resultUpdate = Builders.UpdateFrom(layout, "Owe")                
             //    .SetValue("Created", Created)
             //    .Where("Id", Id)
@@ -80,12 +77,12 @@ namespace ConsoleApp33
             //dbConnection.Execute(resultUpdate);
 
 
-            //DynamicParameters parameter = new DynamicParameters();
-            //parameter.Add("Name", "ccc NULL", DbType.String, ParameterDirection.Input);
-            //parameter.Add("Created", DateTime.Now.AddDays(-1), DbType.Date, ParameterDirection.Input);
-            //parameter.Add("Active", true, DbType.Boolean, ParameterDirection.Input);
+            DynamicParameters parameter = new DynamicParameters();
+            parameter.Add("Name", "ccc NULL", DbType.String, ParameterDirection.Input);
+            parameter.Add("Created", null, DbType.Date, ParameterDirection.Input);            
+            parameter.Add("Active", true, DbType.Boolean, ParameterDirection.Input);
 
-            //var r = dbConnection.Execute("INSERT INTO Owe(Name, Created, Active) VALUES(@Name, @Created, @Active)", parameter);
+            var ra = dbConnection.Execute("INSERT INTO Owe(Name, Created, Active) VALUES(@Name, @Created, @Active)", parameter);
 
 
             var result = Builders.SelectFrom(layout, "Owe")

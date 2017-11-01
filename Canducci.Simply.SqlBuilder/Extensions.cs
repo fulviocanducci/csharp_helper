@@ -10,6 +10,16 @@ namespace Canducci.Simply.SqlBuilder
 {
     public static class Extensions
     {
+        public static int InsertToInt(this IDbConnection connection, IResultBuilder result)
+        {
+            return Insert<int>(connection, result);
+        }
+
+        public static long InsertToLong(this IDbConnection connection, IResultBuilder result)
+        {
+            return Insert<long>(connection, result);
+        }
+
         public static T Insert<T>(this IDbConnection connection, IResultBuilder result)
             where T: struct
         {
@@ -39,7 +49,7 @@ namespace Canducci.Simply.SqlBuilder
             return (o > 0);
         }
 
-        public static void AddRange(this IDataParameterCollection parameterCollection, DbParameter[] parameters)
+        internal static void AddRange(this IDataParameterCollection parameterCollection, DbParameter[] parameters)
         {
             foreach (DbParameter parameter in parameters)
                 parameterCollection.Add(parameter);            
