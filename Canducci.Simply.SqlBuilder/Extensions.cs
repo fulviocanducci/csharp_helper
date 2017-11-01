@@ -35,6 +35,20 @@ namespace Canducci.Simply.SqlBuilder
             return o;
         }
 
+        public static bool Insert(this IDbConnection connection, IResultBuilder result)            
+        {
+            bool status = false;
+            if (connection.State == ConnectionState.Closed) connection.Open();
+            using (IDbCommand command = connection.CreateCommand())
+            {
+                command.CommandText = result.Sql;
+                command.Parameters.AddRange(result.Parameter);
+                status = (command.ExecuteNonQuery() > 0);
+            }
+            if (connection.State == ConnectionState.Open) connection.Close();
+            return status;
+        }
+
         public static bool Update(this IDbConnection connection, IResultBuilder result)        
         {
             int o = 0;

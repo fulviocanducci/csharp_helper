@@ -1,7 +1,7 @@
 ﻿using Canducci.Simply.SqlBuilder;
 using Canducci.Simply.SqlBuilder.Interfaces;
 using Dapper;
-using Flepper.QueryBuilder.DapperExtensions;
+//using Flepper.QueryBuilder.DapperExtensions;
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -57,8 +57,8 @@ namespace ConsoleApp33
                 .Identity()
                 .Builder();
 
-            var r = dbConnection.Insert<int>(resultInsert);
-
+            var r = dbConnection.InsertToInt(resultInsert);
+            
             //IResultBuilder resultUpdate = Builders.UpdateFrom(layout, "Owe")                
             //    .SetValue("Created", Created)
             //    .Where("Id", Id)
