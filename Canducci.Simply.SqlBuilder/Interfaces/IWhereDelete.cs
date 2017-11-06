@@ -1,9 +1,8 @@
 ﻿using System.Data.Common;
 namespace Canducci.Simply.SqlBuilder.Interfaces
 {
-    public interface IWhereDelete: IWhereBuilder
+    public interface IWhereDelete : IWhereBuilder, IWhereType<IWhereDelete>
     {
-        IWhereDelete Where<T>(string field, T value)
-            where T : DbParameter;
+        
     }
 }

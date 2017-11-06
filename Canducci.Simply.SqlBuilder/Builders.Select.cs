@@ -19,16 +19,62 @@ namespace Canducci.Simply.SqlBuilder
             return this;
         }
 
-        public ISelect Where<T>(string column, string compare, T parameter) where T : DbParameter
+        #region OrWhere
+
+        public ISelect OrWhere<T>(string column, T parameter) where T : DbParameter
+        {
+            return OrWhere(column, "=", parameter);
+        }
+
+        public ISelect OrWhere<T>(string column, string compare, T parameter) where T : DbParameter
         {
             if (StrQuery.ToString().Contains("WHERE") == false)
                 StrQuery.AppendFormat(" WHERE ");
+            else
+                StrQuery.AppendFormat(" OR ");
             StrQuery.AppendFormat($"{Layout.Param(column)} {compare} {parameter.ParameterName}");
             Parameters.Add(parameter);
             return this;
         }
 
-        public ISelect Where<ParameterType,T>(string column, string compare, T value, string parameterName = null, DbType? dbType = null, bool NullMapping = false, ParameterDirection parameterDirection = ParameterDirection.Input, int? size = null) 
+        public ISelect OrWhere<ParameterType, T>(string column, string compare, T value, string parameterName = null, DbType? dbType = null, bool nullMapping = false, ParameterDirection parameterDirection = ParameterDirection.Input, int? size = null)
+            where ParameterType : DbParameter
+            where T : struct
+        {
+            ParameterType parameter = Activator.CreateInstance<ParameterType>();
+            parameter.ParameterName = parameterName ?? $"@{column}";
+            parameter.Value = value;
+            parameter.SourceColumn = column;
+            parameter.SourceColumnNullMapping = nullMapping;
+            parameter.Direction = parameterDirection;
+            if (dbType != null) parameter.DbType = dbType.Value;
+            if (size != null) parameter.Size = size.Value;
+            return OrWhere(column, compare, parameter);
+        }
+
+        public ISelect OrWhere<ParameterType, T>(string column, T value, string parameterName = null, DbType? dbType = null, bool nullMapping = false, ParameterDirection parameterDirection = ParameterDirection.Input, int? size = null)
+            where ParameterType : DbParameter
+            where T : struct
+        {
+            return OrWhere<ParameterType, T>(column, "=", value, parameterName, dbType, nullMapping, parameterDirection, size);
+        }
+
+        #endregion
+
+        #region Where
+
+        public ISelect Where<T>(string column, string compare, T parameter) where T : DbParameter
+        {
+            if (StrQuery.ToString().Contains("WHERE") == false)
+                StrQuery.AppendFormat(" WHERE ");
+            else
+                StrQuery.AppendFormat(" AND ");
+            StrQuery.AppendFormat($"{Layout.Param(column)} {compare} {parameter.ParameterName}");
+            Parameters.Add(parameter);
+            return this;
+        }
+
+        public ISelect Where<ParameterType,T>(string column, string compare, T value, string parameterName = null, DbType? dbType = null, bool nullMapping = false, ParameterDirection parameterDirection = ParameterDirection.Input, int? size = null) 
             where ParameterType: DbParameter
             where T: struct
         {
@@ -36,12 +82,26 @@ namespace Canducci.Simply.SqlBuilder
             parameter.ParameterName = parameterName ?? $"@{column}";
             parameter.Value = value;
             parameter.SourceColumn = column;
-            parameter.SourceColumnNullMapping = NullMapping;
+            parameter.SourceColumnNullMapping = nullMapping;
             parameter.Direction = parameterDirection;
             if (dbType != null) parameter.DbType = dbType.Value;            
             if (size != null) parameter.Size = size.Value;
             return Where(column, compare, parameter);
         }
+
+        public ISelect Where<ParameterType, T>(string column, T value, string parameterName = null, DbType? dbType = null, bool nullMapping = false, ParameterDirection parameterDirection = ParameterDirection.Input, int? size = null)
+            where ParameterType : DbParameter
+            where T : struct
+        {
+            return Where<ParameterType, T>(column, "=", value, parameterName, dbType, nullMapping, parameterDirection, size);
+        }
+
+        ISelect IWhereType<ISelect>.Where<T>(string column, T parameter)
+        {
+            return Where(column, "=", parameter);
+        }
+
+        #endregion
 
         ISelect ISelect.Columns(params string[] values)
         {
@@ -55,10 +115,6 @@ namespace Canducci.Simply.SqlBuilder
             }
             return this;
         }
-
-        ISelect ISelect.Where<T>(string column, T parameter)
-        {
-            return Where(column, "=", parameter);
-        }
+       
     }
 }

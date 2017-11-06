@@ -2,7 +2,7 @@
 using System.Data.Common;
 namespace Canducci.Simply.SqlBuilder
 {
-    public partial class Builders: ISetValue, IWhere, IUpdate
+    public partial class Builders: ISetValue, IUpdate
     {
         public Builders()
         {
@@ -29,31 +29,37 @@ namespace Canducci.Simply.SqlBuilder
             return this;
         }
 
-        public IWhere Where<T>(string field, T value)
-            where T : DbParameter
-        {
-            if (!StrQuery.ToString().Contains("WHERE"))
-                StrQuery.AppendFormat(" WHERE ");
-            else
-                StrQuery.AppendFormat(" AND ");
-            StrQuery.AppendFormat("[{0}]={1}", field, value.ParameterName);
-            Parameters.Add(value);
-            return this;
-        }
+        //public IWhere Where<T>(string field, T value)
+        //    where T : DbParameter
+        //{
+        //    if (!StrQuery.ToString().Contains("WHERE"))
+        //        StrQuery.AppendFormat(" WHERE ");
+        //    else
+        //        StrQuery.AppendFormat(" AND ");
+        //    StrQuery.AppendFormat("[{0}]={1}", field, value.ParameterName);
+        //    Parameters.Add(value);
+        //    return this;
+        //}
 
         IWhere ISetValue.SetValue<T>(string field, T value)
         {
             return (IWhere)SetValue(field, value);
         }
 
-        IWhere IWhere.SetValue<T>(string field, T value)
-        {
-            return (IWhere)SetValue(field, value);
-        }
+        //IWhere ISetValue.SetValue<T>(string field, T value)
+        //{
+        //    return (IWhere)SetValue(field, value);
+        //}
 
-        IWhereDelete IWhereDelete.Where<T>(string field, T value)
-        {
-            return (IWhereDelete)Where(field, value);
-        }
+        //IWhere IWhere.SetValue<T>(string field, T value)
+        //{
+        //    return (IWhere)SetValue(field, value);
+        //}
+
+        //IWhereDelete IWhereDelete.Where<T>(string field, T value)
+        //{
+        //    return Where(field, value);
+        //}
+
     }
 }
