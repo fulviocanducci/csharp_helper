@@ -28,17 +28,17 @@ namespace Canducci.Simply.SqlBuilder
             return this;
         }
 
-        public ISelect Where<ParameterType,T>(string column, string compare, string parameterName, T value, System.Data.DbType dbType, bool NullMapping = false, ParameterDirection parameterDirection = ParameterDirection.Input, int? size = null) 
+        public ISelect Where<ParameterType,T>(string column, string compare, T value, string parameterName = null, DbType? dbType = null, bool NullMapping = false, ParameterDirection parameterDirection = ParameterDirection.Input, int? size = null) 
             where ParameterType: DbParameter
             where T: struct
         {
             ParameterType parameter = Activator.CreateInstance<ParameterType>();
-            parameter.ParameterName = parameterName;
+            parameter.ParameterName = parameterName ?? $"@{column}";
             parameter.Value = value;
             parameter.SourceColumn = column;
-            parameter.DbType = dbType;
             parameter.SourceColumnNullMapping = NullMapping;
             parameter.Direction = parameterDirection;
+            if (dbType != null) parameter.DbType = dbType.Value;            
             if (size != null) parameter.Size = size.Value;
             return Where(column, compare, parameter);
         }

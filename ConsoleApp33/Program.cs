@@ -54,12 +54,12 @@ namespace ConsoleApp33
 
             IResultBuilder resultSelect0 = Builders
                 .SelectFrom(layout, "Owe")
-                .Where<SqlParameter, int>("Id", "=", "@Id", 2, DbType.Int32, false)
+                .Where<SqlParameter, int>("Id", "=", 2)
                 .Builder();
 
             IResultBuilder resultSelect1 = Builders
                 .SelectFrom(layout, "Credit")
-                .Where<SqlParameter, int>("Id", "=", "@Id", 1, DbType.Int32, false)                
+                .Where<SqlParameter, int>("Id", "=", 1)                
                 .Builder();
 
             var a1 = dbConnection.Query<Owe>(resultSelect0);
