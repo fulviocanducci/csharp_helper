@@ -1,5 +1,7 @@
 ﻿using System.Data.Common;
 using Canducci.Simply.SqlBuilder.Interfaces;
+using System;
+using System.Data;
 
 namespace Canducci.Simply.SqlBuilder
 {
@@ -24,6 +26,21 @@ namespace Canducci.Simply.SqlBuilder
             StrQuery.AppendFormat($"{Layout.Param(column)} {compare} {parameter.ParameterName}");
             Parameters.Add(parameter);
             return this;
+        }
+
+        public ISelect Where<ParameterType,T>(string column, string compare, string parameterName, T value, System.Data.DbType dbType, bool NullMapping = false, ParameterDirection parameterDirection = ParameterDirection.Input, int? size = null) 
+            where ParameterType: DbParameter
+            where T: struct
+        {
+            ParameterType parameter = Activator.CreateInstance<ParameterType>();
+            parameter.ParameterName = parameterName;
+            parameter.Value = value;
+            parameter.SourceColumn = column;
+            parameter.DbType = dbType;
+            parameter.SourceColumnNullMapping = NullMapping;
+            parameter.Direction = parameterDirection;
+            if (size != null) parameter.Size = size.Value;
+            return Where(column, compare, parameter);
         }
 
         ISelect ISelect.Columns(params string[] values)

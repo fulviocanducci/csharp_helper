@@ -2,7 +2,7 @@
 {
     public interface IIdentity
     {
-        IBuilder Identity();
+        IBuilder Identity(IdentityResult result = IdentityResult.Integer);
         IResultBuilder Builder();
     }
 }

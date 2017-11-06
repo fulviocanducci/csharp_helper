@@ -1,8 +1,9 @@
 ﻿using Canducci.Simply.SqlBuilder;
 using Canducci.Simply.SqlBuilder.Interfaces;
-using Dapper;
+//using Dapper;
 //using Flepper.QueryBuilder.DapperExtensions;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -51,14 +52,23 @@ namespace ConsoleApp33
             #endregion
 
 
-            IResultBuilder resultInsert = Builders.InsertFrom(layout, "Owe")
-                .Columns("Created", "Name", "Active")
-                .Values(Created, Name, Active)
-                .Identity()
+            IResultBuilder resultSelect0 = Builders
+                .SelectFrom(layout, "Owe")
+                .Where<SqlParameter, int>("Id", "=", "@Id", 2, DbType.Int32, false)
                 .Builder();
 
-            var r = dbConnection.InsertToInt(resultInsert);
-            
+            IResultBuilder resultSelect1 = Builders
+                .SelectFrom(layout, "Credit")
+                .Where<SqlParameter, int>("Id", "=", "@Id", 1, DbType.Int32, false)                
+                .Builder();
+
+            var a1 = dbConnection.Query<Owe>(resultSelect0);
+            var a2 = dbConnection.Query<Credit>(resultSelect1);
+
+
+            var aaa = 100;
+            //var r = dbConnection.InsertToInt(resultInsert);
+
             //IResultBuilder resultUpdate = Builders.UpdateFrom(layout, "Owe")                
             //    .SetValue("Created", Created)
             //    .Where("Id", Id)
@@ -77,18 +87,21 @@ namespace ConsoleApp33
             //dbConnection.Execute(resultUpdate);
 
 
-            DynamicParameters parameter = new DynamicParameters();
-            parameter.Add("Name", "ccc NULL", DbType.String, ParameterDirection.Input);
-            parameter.Add("Created", null, DbType.Date, ParameterDirection.Input);            
-            parameter.Add("Active", true, DbType.Boolean, ParameterDirection.Input);
+            //DynamicParameters parameter = new DynamicParameters();
+            //parameter.Add("Name", "ccc NULL", DbType.String, ParameterDirection.Input);
+            //parameter.Add("Created", null, DbType.Date, ParameterDirection.Input);            
+            //parameter.Add("Active", true, DbType.Boolean, ParameterDirection.Input);
 
-            var ra = dbConnection.Execute("INSERT INTO Owe(Name, Created, Active) VALUES(@Name, @Created, @Active)", parameter);
+            //var ra = dbConnection.Execute("INSERT INTO Owe(Name, Created, Active) VALUES(@Name, @Created, @Active)", parameter);
 
 
-            var result = Builders.SelectFrom(layout, "Owe")
+            IResultBuilder result = Builders
+                .SelectFrom(layout, "Owe")
                 
-                //.Where("Id", Id)//
                 .Builder();
+
+            IList<Owe> listOwe = dbConnection.Query<Owe>(result);
+
 
             var dados = dbConnection.Query(result);
 

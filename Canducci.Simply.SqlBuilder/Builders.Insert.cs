@@ -29,12 +29,26 @@ namespace Canducci.Simply.SqlBuilder
             return new ResultBuilder(StrQuery.ToString(), Parameters.ToArray());
         }
 
-        public IBuilder Identity()
+        public IBuilder Identity(IdentityResult result = IdentityResult.Integer)
         {
-            StrQuery.Append("SELECT CAST(SCOPE_IDENTITY() AS int);");
+            string returnType = "";
+            switch(result)
+            {
+                case IdentityResult.Integer:
+                    {
+                        returnType = "INT";
+                        break;
+                    }
+                case IdentityResult.BigInteger:
+                    {
+                        returnType = "BIGINT";
+                        break;
+                    }
+            }
+            StrQuery.Append($"SELECT CAST(SCOPE_IDENTITY() AS {returnType});");
             return this;
         }
-
+        
         public IColumns Insert(string table, string schema = "")
         {
             if (string.IsNullOrWhiteSpace(schema))
